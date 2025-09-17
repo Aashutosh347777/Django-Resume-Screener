@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h1 class="card-title text-center mb-4">Upload Resume</h1>
+            <form method="post" enctype="multipart/form-data" action="{% url 'jobs:upload_resume' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="job_select" class="form-label">Select Job</label>
+                    <select class="form-select" id="job_select" name="job_id" required>
+                        <option value="" disabled selected>Choose a job...</option>
+                        {% for job in jobs %}
+                            <option value="{{ job.id }}">{{ job.title }} - {{ job.location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="resume_file" class="form-label">Upload Resume File (PDF, DOCX)</label>
+                    <input class="form-control" type="file" id="resume_file" name="resume_file" required accept=".pdf,.docx">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3">Submit Resume</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
