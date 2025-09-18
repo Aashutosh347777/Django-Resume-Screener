@@ -32,10 +32,10 @@ class Job(models.Model):
         return self.job_resumes.count()
         # works since resume has a job foreign key
 
-class Resume(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job_resumes')
-    full_name = models.CharField(max_length=100)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+# class Resume(models.Model):
+#     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job_resumes')
+#     full_name = models.CharField(max_length=100)
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Resume for {self.full_name} for {self.job.title}"
+#     def __str__(self):
+#         return f"Resume for {self.full_name} for {self.job.title}"

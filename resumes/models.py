@@ -7,10 +7,10 @@ class Resumes(models.Model):
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name= 'resumes')
     # linking resumes to the account who uploaded it
 
-    resume_files = models.FileField(upload_to= "media/resume/")
+    resume_files = models.FileField(upload_to= "resume/")
 
     # link to jobs
-    job = models.ForeignKey(Job, on_delete = models.SET_NULL,  null = True, blank = True)
+    job = models.ForeignKey(Job, on_delete = models.SET_NULL,  null = True, blank = True, related_name='job_resumes')
 
     # add parsed_text field (extracting the plain text using ocr from resumes)
     parsed_text = models.TextField(blank = True, null = True)

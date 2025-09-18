@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,3 +135,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 # LOGIN_REDIRECT_URL = "accounts/dashboard/"
 LOGOUT_REDIRECT_URL = "login"
+
+# media configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

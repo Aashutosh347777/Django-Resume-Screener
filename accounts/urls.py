@@ -5,6 +5,5 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('dashboard/',acc_views.dashboard, name = 'dashboard'),
-    path('dashboard/',acc_views.dashboard, name = 'dashboard'),
-    path('random/',acc_views.random, name = 'random'),
+    path('profile', acc_views.profile_view, name = 'profile'),
 ]

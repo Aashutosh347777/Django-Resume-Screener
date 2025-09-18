@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import JobForm
 from .models import Job
@@ -9,6 +9,10 @@ from docx import Document
 import io
 import requests
 import re
+import os
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.conf import settings
+from django.http import FileResponse,Http404
 
 # Create your views here.
 @login_required
@@ -154,3 +158,49 @@ def extract_resume_details(text):
         'email': email,
         'phone': phone
     }
+
+@login_required
+def job_details(request, job_id):
+    #getting the job id for the sepeicfic job
+    job = get_object_or_404(Job, id = job_id)
+
+    # resumes linked to the jobs
+    resumes = Resumes.objects.filter(job = job).order_by('-match_score')
+
+    context = {
+        'job' : job,
+        'resumes' : resumes
+    }
+
+    return render(request, 'jobs/job_details.html', context)
+
+
+@login_required
+def resume_detials(request, resume_id):
+    # getting resume id 
+    resume = get_object_or_404(Resumes, id = resume_id)
+
+    context = {
+        'resume' : resume
+    }
+
+    return render(request, 'jobs/resume_details.html', context)
+
+
+@xframe_options_exempt
+def serve_media(request,path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path,'rb'))
+    else:
+        raise Http404("Media file not found.")
+    
+
+@login_required
+def close_posting(request,job_id):
+    job = get_object_or_404(Job, id = job_id)
+    job.is_active = False
+    job.save()
+    messages.success(request, "Closing Sucessful!")
+
+    return redirect('accounts:dashboard')

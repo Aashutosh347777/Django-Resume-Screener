@@ -87,10 +87,16 @@
                                                 <td>{{ job.get_employment_type_display }}</td>
                                                 <td>{{ job.created_at|date:"M d, Y" }}</td>
                                                 <td>{{ job.resumes_count }}</td>
-                                                <td><span class="badge bg-success">Active</span></td>
+                                                <td>  <span class="badge {% if job.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                                        {% if job.is_active %}
+                                                        Active
+                                                        {% else %}
+                                                        Inactive
+                                                        {% endif %}
+                                                    </span></td>
                                                 <td>
-                                                    <a href="#" class="btn btn-sm btn-outline-info">View</a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger">Close</a>
+                                                    <a href="{% url 'jobs:job_details' job.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                                    <a href="{% url 'jobs:close_posting' job.id %}" class="btn btn-sm btn-outline-danger">Close</a>
                                                 </td>
                                                 </tr>
                                             {% endfor %}

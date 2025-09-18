@@ -15,10 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.urls import include
 from resume_screener import views as res_views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+from jobs import views as jobs_views
 
 
 urlpatterns = [
@@ -28,3 +31,9 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('jobs/',include('jobs.urls')),
 ]
+
+# serve the media files
+if settings.DEBUG:
+    urlpatterns += [
+         re_path(r'^media/(?P<path>.*)$', jobs_views.serve_media, name='media_serve'),    
+    ]

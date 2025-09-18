@@ -11,7 +11,7 @@ role_choices = [('admin','Admin'),
 # custom user model
 class CustomUser(AbstractUser):
     role = models.CharField(max_length = 20, choices= role_choices, default = 'recruiter')
-    profile_pictures = models.ImageField(upload_to = "media/profile_pics/", blank = True, null = True)
+    profile_pictures = models.ImageField(upload_to = "profile_pics/", blank = True, null = True)
     bio = models.TextField(max_length = 200, blank = True)
 
     def __str__(self):

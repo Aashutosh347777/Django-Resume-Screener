@@ -25,5 +25,15 @@ def dashboard(request):
 
     return render(request, "accounts/dashboard.html",context)
 
-def random(request):
-    return render(request, "accounts/random.html")
+@login_required
+def profile_view(request):
+    user = request.user
+    if request.method == "POST":
+        user.profile_pictures = request.FILES.get('profile_picture')
+        user.bio = request.POST.get('bio')
+        user.save()
+
+        messages.success(request,"Profile updated successfully!")
+        return redirect("accounts:profile")
+
+    return render(request,'accounts/profile.html', {'user': user}) 
