@@ -4,40 +4,6 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'accounts:dashboard' %}">
-                                <i class="fas fa-home me-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-briefcase me-2"></i>
-                                Jobs
-                            </a>
-                        </li>
-                        {% if user.is_authenticated and user.role == 'recruiter' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-file-alt me-2"></i>
-                                Resumes
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-search me-2"></i>
-                                Screening Results
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard</h1>
@@ -52,9 +18,6 @@
                             <a href="{% url 'jobs:upload_resume' %}" class="btn btn-sm btn-primary"><i class="fas fa-plus me-1"></i> Upload Resumes</a>
                         </div>
                         {% endif %}
-                        <div class="btn-group me-2">
-                             <button type="button" class="btn btn-sm btn-secondary" id="viewAllBtn"><i class="fas fa-list me-1"></i> View All</button>
-                        </div>
                     </div>
                 </div>
 
@@ -173,7 +136,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'accounts/dashboard-script.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'accounts/dashboard-script.js' %}"></script>
 {% endblock %}

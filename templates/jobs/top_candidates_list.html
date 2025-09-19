@@ -1,0 +1,95 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Top Candidates for "{{ job.title }}"</h1>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Job Description</h6>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ job.title }}</h5>
+                        <p class="card-text">{{ job.description }}</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Location:</strong> {{ job.location }}</li>
+                            <li class="list-group-item"><strong>Employment Type:</strong> {{ job.get_employment_type_display }}</li>
+                            <li class="list-group-item"><strong>Salary Range:</strong> {{ job.salary_range }}</li>
+                            <li class="list-group-item"><strong>Required Skills:</strong> {{ job.requirements }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h4">Matched Resumes</h3>
+                    <div class="input-group" style="width: 200px;">
+                        <span class="input-group-text">Show Top</span>
+                        <select class="form-select" id="candidateCountFilter">
+                            <option value="all">All</option>
+                            <option value="3">3</option>
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </div>
+
+                {% if resumes %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="candidatesTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Match Score</th>
+                                <th>Uploaded At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for resume in resumes %}
+                            <tr class="candidate-row">
+                                <td>{{ resume.candidate_name|default:"Unknown" }}</td>
+                                <td>{{ resume.match_score|default:"N/A"|floatformat:2 }}</td>
+                                <td>{{ resume.uploaded_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'jobs:resume_details' resume.id %}" class="btn btn-sm btn-outline-info">View Details</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-warning text-center" role="alert">
+                    No resumes have been submitted for this job yet.
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectElement = document.getElementById('candidateCountFilter');
+            const tableRows = document.querySelectorAll('#candidatesTable tbody .candidate-row');
+            
+            function filterRows() {
+                const count = selectElement.value === 'all' ? tableRows.length : parseInt(selectElement.value, 10);
+                tableRows.forEach((row, index) => {
+                    row.style.display = index < count ? '' : 'none';
+                });
+            }
+
+            selectElement.addEventListener('change', filterRows);
+            
+            // Initial filter application
+            filterRows();
+        });
+    </script>
+{% endblock %}

@@ -58,7 +58,7 @@ def upload_resume(request):
                         # Make a POST request to the FastAPI API to get the match score
             api_url = "http://127.0.0.1:8001/score"  # URL of your FastAPI server
             payload = {
-                "job_description_text": f"{job.title} {job.description}",
+                "job_description_text": f"{job.title} {job.description} {job.requirements} {job.location} {job.employment_type}",
                 "resume_text": parsed_text
             }
             
@@ -90,7 +90,7 @@ def upload_resume(request):
             messages.error(request, "Selected Job doesn't exist.")
             return redirect('jobs:upload_resume')
     # fetch all the jobs to display
-    jobs = Job.objects.all()
+    jobs = Job.objects.filter(is_active = True)
     context = {
         'jobs': jobs
     }
@@ -204,3 +204,35 @@ def close_posting(request,job_id):
     messages.success(request, "Closing Sucessful!")
 
     return redirect('accounts:dashboard')
+
+
+@login_required
+def jobs_list(request):
+    jobs = Job.objects.filter(created_by = request.user).order_by('-created_at')
+
+    context = {
+        'jobs' : jobs
+    }
+
+    return render(request, 'jobs/jobs_list.html', context)
+
+@login_required
+def screening_list(request):
+    jobs = Job.objects.filter(created_by = request.user).order_by('-created_at')
+
+    context = {
+        'jobs' : jobs
+    }
+
+    return render(request, 'jobs/screening_jobs.html', context)
+
+@login_required
+def top_candidates_list(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    resumes = Resumes.objects.filter(job=job).order_by('-match_score')
+    
+    context = {
+        'job': job,
+        'resumes': resumes
+    }
+    return render(request, 'jobs/top_candidates_list.html', context)
