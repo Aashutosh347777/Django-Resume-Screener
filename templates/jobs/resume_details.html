@@ -44,7 +44,7 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-body">
                                         <h5 class="card-title"><i class="fas fa-cogs me-2 text-info"></i>Extracted Skills</h5>
-                                        <p class="card-text">{{ resume.extracted_skills }}</p>
+                                        <p class="card-text">{{ resume.skill }}</p>
                                     </div>
                                 </div>
                                 <div class="card shadow mb-4">
@@ -62,7 +62,7 @@
                                 <div class="card shadow mb-4">
                                     <div class="card-body">
                                         <h5 class="card-title"><i class="fas fa-file-alt me-2 text-secondary"></i>Full Resume Text</h5>
-                                        <p class="card-text">{{ resume.raw_text|linebreaksbr }}</p>
+                                        <p class="card-text">{{ resume.parsed_text|linebreaksbr }}</p>
                                     </div>
                                 </div>
                         {% if resume.resume_files %}

@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Flagged Resumes</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="{% url 'resumes:resumes_list' %}" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="fas fa-arrow-left me-1"></i> Back to All Resumes
+                        </a>
+                        <a href="{% url 'accounts:dashboard' %}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Notice: Flagged Resumes</h4>
+                    <p>These resumes have a 0.0 match score and need to be re-screened. Make sure the API is up and running before re-screening them.</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Unscored Resumes</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Candidate Name</th>
+                                                <th>Job Title</th>
+                                                <th>Match Score</th>
+                                                <th>Uploaded At</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for resume in resumes %}
+                                            <tr>
+                                                <td>{{ resume.id }}</td>
+                                                <td>{{ resume.candidate_name|default:"N/A" }}</td>
+                                                <td>{{ resume.job.title|default:"N/A" }}</td>
+                                                <td>
+                                                    <span class="badge bg-danger">N/A</span>
+                                                </td>
+                                                <td>{{ resume.uploaded_at|date:"M d, Y" }}</td>
+                                                <td>
+                                                    <form method="post" action="{% url 'resumes:rescreen_resume' resume.id %}" style="display:inline;">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-warning btn-sm">Re-screen</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="6" class="text-center">No flagged resumes found.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock %}

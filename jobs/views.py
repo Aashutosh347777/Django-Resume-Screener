@@ -83,6 +83,10 @@ def upload_resume(request):
                     candidate_name=details['name'],
                     email=details['email'],
                     phone=details['phone'],
+                    skill = details['skill'],
+                    work_experience = details['work_experience'],
+                    education = details['education'],
+
                     ats_score=0.0, # Placeholder for now, can be used for ATS score
                     match_score=match_score
                 )
@@ -101,10 +105,6 @@ def upload_resume(request):
     return render(request, 'jobs/upload_resume.html', context)
 
 def extract_text_from_file(file_obj):
-    """
-    Extracts text from an uploaded file object.
-    Supports PDF and DOCX formats.
-    """
     try:
         # Check if the file is a PDF
         if file_obj.name.endswith('.pdf'):
@@ -122,7 +122,7 @@ def extract_text_from_file(file_obj):
                 text += para.text + "\n"
             return text
         
-        # Handle unsupported file types gracefully
+        # handle unsupported file types gracefully
         else:
             return "Unsupported file format!"
 
@@ -139,6 +139,9 @@ def extract_resume_details(text):
     email = None
     phone = None
     name = "Unknown Candidate"
+    skill = None
+    work_experience = None
+    education = None
     
     # Simple regex for email extraction
     email_match = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
@@ -150,16 +153,33 @@ def extract_resume_details(text):
     if phone_match:
         phone = phone_match.group(0)
 
-    # Simple regex for name extraction (often at the beginning, may need refinement)
-    # This pattern looks for capitalized words at the start of the text
+    # pattern looks for capitalized words at the start of the text
     name_match = re.search(r'^[A-Z][a-z]+(?:\s[A-Z][a-z]+)+', text)
     if name_match:
         name = name_match.group(0)
 
+    # pattern for skill
+    skills_match = re.search(r'skills?(.*?)(?:work experience|education|projects|summary|)\s*$', text, re.I | re.S)
+    if skills_match:
+        skill = skills_match.group(1).strip()
+    
+    # Work Experience section
+    work_exp_match = re.search(r'work\s*experience|professional\s*experience(.*?)(?:education|skills|projects|summary|)\s*$', text, re.I | re.S)
+    if work_exp_match:
+        work_experience = work_exp_match.group(1).strip()
+    
+    # Education section
+    education_match = re.search(r'education(.*?)(?:work experience|skills|projects|summary|)\s*$', text, re.I | re.S)
+    if education_match:
+        education = education_match.group(1).strip()
+
     return {
         'name': name,
         'email': email,
-        'phone': phone
+        'phone': phone,
+        'skill': skill,
+        'work_experience': work_experience,
+        'education' : education
     }
 
 @login_required

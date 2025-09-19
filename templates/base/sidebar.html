@@ -25,12 +25,22 @@
                 </a>
             </li>
             {% endif %}
+            {% if user.is_authenticated and user.role == 'hr' %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'jobs:screening_jobs_list' %}">
                     <i class="fas fa-search me-2"></i>
                     Screening Results
                 </a>
             </li>
+            {% endif %}
+            {% if user.is_authenticated and user.role == 'recruiter' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'resumes:flagged_resumes' %}">
+                    <i class="fas fa-search me-2"></i>
+                    Re-Screening
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

@@ -20,6 +20,8 @@ class Resumes(models.Model):
     email = models.EmailField(blank=True, null = True)
     skill = models.TextField(blank= True, null= True )
     phone = models.CharField(max_length= 50, blank=True, null= True)
+    work_experience = models.TextField(blank=True, null=True)
+    education = models.TextField(blank=True, null=True)
 
     # resume dates
     uploaded_at = models.DateTimeField(auto_now_add=True)

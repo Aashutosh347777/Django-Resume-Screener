@@ -115,7 +115,7 @@
                                                 <td>{{ resume.uploaded_at|date:"M d, Y" }}</td>
                                                 <td>{{ resume.match_score|floatformat:"2" }}</td>
                                                 <td>
-                                                    <a href="#" class="btn btn-outline-primary btn-sm">View</a>
+                                                    <a href="{{ resume.resume_files.url }}" class="btn btn-outline-primary btn-sm">View</a>
                                                 </td>
                                             </tr>
                                             {% endfor %}
