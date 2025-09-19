@@ -14,3 +14,4 @@ class JobForm(forms.ModelForm):
             'employment_type': forms.Select(attrs={'class': 'form-select'}),
             'salary_range': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., $100,000 - $120,000'}),
         }
+

@@ -40,8 +40,9 @@ def post_job(request):
 @login_required
 def upload_resume(request):
     if request.method == "POST":
+        # form = ResumeUploadForm(request.POST, request.FILES)
         job_id = request.POST.get('job_id')
-        resume_file = request.FILES.get('resume_file')
+        resume_files = request.FILES.getlist('resume_files')
 
         if not job_id and resume:
             messages.error("Please make the entries!")
@@ -49,40 +50,42 @@ def upload_resume(request):
         
         try:
             job = Job.objects.get(id = job_id)
-            # extract text from the resume
-            parsed_text = extract_text_from_file(resume_file)   
-
-            # resume information
-            details = extract_resume_details(parsed_text)
-
-                        # Make a POST request to the FastAPI API to get the match score
             api_url = "http://127.0.0.1:8001/score"  # URL of your FastAPI server
-            payload = {
-                "job_description_text": f"{job.title} {job.description} {job.requirements} {job.location} {job.employment_type}",
-                "resume_text": parsed_text
-            }
             
-            match_score = 0.0
-            try:
-                response = requests.post(api_url, json=payload)
-                response.raise_for_status() # Raise an exception for bad status codes
-                match_score = response.json().get('score', 0.0) * 100 # Convert to percentage
-            except requests.exceptions.RequestException as e:
-                print(f"Error connecting to FastAPI API: {e}")
-                messages.error(request, "Failed to get a match score from the API. Please check the API server.")
+            for resume_file in resume_files:
+                # extract text from the resume
+                parsed_text = extract_text_from_file(resume_file)   
+
+                # resume information
+                details = extract_resume_details(parsed_text)
+
+                # Make a ppst request to the FastAPI API to get the match score
+                payload = {
+                    "job_description_text": f"{job.title} {job.description} {job.requirements} {job.location} {job.employment_type}",
+                    "resume_text": parsed_text
+                }
             
-            # resume object
-            resume = Resumes.objects.create(
-                uploaded_by=request.user,
-                job=job,
-                resume_files=resume_file,
-                parsed_text=parsed_text,
-                candidate_name=details['name'],
-                email=details['email'],
-                phone=details['phone'],
-                ats_score=0.0, # Placeholder for now, can be used for ATS score
-                match_score=match_score
-            )
+                match_score = 0.0
+                try:
+                    response = requests.post(api_url, json=payload)
+                    response.raise_for_status() # Raise an exception for bad status codes
+                    match_score = response.json().get('score', 0.0) * 100 # Convert to percentage
+                except requests.exceptions.RequestException as e:
+                    print(f"Error connecting to FastAPI API: {e}")
+                    messages.error(request, "Failed to get a match score from the API. Please check the API server.")
+                
+                # resume object
+                Resumes.objects.create(
+                    uploaded_by=request.user,
+                    job=job,
+                    resume_files=resume_file,
+                    parsed_text=parsed_text,
+                    candidate_name=details['name'],
+                    email=details['email'],
+                    phone=details['phone'],
+                    ats_score=0.0, # Placeholder for now, can be used for ATS score
+                    match_score=match_score
+                )
             messages.success(request, f"Resume uploaded and screened successfully! Match score: {match_score:.2f}%")
             return redirect('accounts:dashboard')
 

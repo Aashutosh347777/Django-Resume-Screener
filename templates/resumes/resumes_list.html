@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">All Resumes</h1>
+            </div>
+
+            {% if resumes %}
+            <div class="row">
+                {% for resume in resumes %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">{{ resume.candidate_name }}</h5>
+                        </div>
+                        <div class="card-body p-2">
+                            <!-- Iframe to display the PDF content -->
+                            <iframe src="{{ resume.resume_files.url }}" style="width:100%; height:400px; border:none;">
+                                <p>Your browser does not support iframes.</p>
+                            </iframe>
+                        </div>
+                        <div class="card-footer bg-light border-top text-center">
+                            <a href="{{ resume.resume_files.url }}" class="btn btn-primary w-100" target="_blank">
+                                <i class="fas fa-expand me-2"></i>View Full
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                No resumes have been submitted for your job postings yet.
+            </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}
