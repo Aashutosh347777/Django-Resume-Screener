@@ -56,7 +56,7 @@
                                 <td>{{ resume.match_score|default:"N/A"|floatformat:2 }}</td>
                                 <td>{{ resume.uploaded_at|date:"M d, Y" }}</td>
                                 <td>
-                                    <a href="{% url 'jobs:resume_details' resume.id %}" class="btn btn-sm btn-outline-info">View Details</a>
+                                    <a href="{% url 'resumes:resume_details' resume.id %}" class="btn btn-sm btn-outline-info">View Details</a>
                                 </td>
                             </tr>
                             {% endfor %}

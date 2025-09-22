@@ -41,7 +41,7 @@
                                                 <td><span class="badge bg-primary">{{ resume.match_score|floatformat:"2" }}%</span></td>
                                                 <td>{{ resume.uploaded_at|date:"M d, Y" }}</td>
                                                 <td>
-                                                    <a href="{% url 'jobs:resume_details' resume.id %}" class="btn btn-sm btn-outline-info">View Details</a>
+                                                    <a href="{% url 'resumes:resume_details' resume.id %}" class="btn btn-sm btn-outline-info">View Details</a>
                                                 </td>
                                             </tr>
                                             {% endfor %}

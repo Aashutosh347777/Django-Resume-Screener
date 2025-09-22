@@ -6,7 +6,7 @@
         <div class="container mt-5">
             <div class="card shadow p-4">
                 <h1 class="card-title text-center mb-4">Upload Resume</h1>
-                <form method="post" enctype="multipart/form-data" action="{% url 'jobs:upload_resume' %}">
+                <form method="post" enctype="multipart/form-data" action="{% url 'resumes:upload_resume' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="job_select" class="form-label">Select Job</label>

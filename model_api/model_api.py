@@ -30,11 +30,6 @@ class ScoreRequest(BaseModel):
     resume_text: str
 
 def clean_and_preprocess(text):
-    """
-    Cleans a string by removing newlines, extra spaces, and special characters.
-    This function is now a unified method to ensure consistency between
-    job description and resume text preprocessing.
-    """
     text = str(text).lower()
     text = text.replace("\n", " ")  # Replace newlines with spaces
     text = re.sub(r'[^a-z0-9\s]', '', text) # Remove special characters

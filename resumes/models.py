@@ -27,7 +27,7 @@ class Resumes(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
 
-    # add scoring fields after ai assessment
+    # add scoring fields
     ats_score = models.FloatField(blank=True, null= True)
     match_score = models.FloatField(blank=True, null= True)
     

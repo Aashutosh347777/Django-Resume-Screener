@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.urls import include
-from resume_screener import views as res_views
+from resume_screener import views as res_scr_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,7 +25,7 @@ from jobs import views as jobs_views
 
 
 urlpatterns = [
-    path('', res_views.login_view, name='login'),
+    path('', res_scr_views.login_view, name='login'),
     path('Logout/',auth_views.LogoutView.as_view(next_page = 'login'), name = 'logout'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),

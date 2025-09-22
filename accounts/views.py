@@ -20,7 +20,7 @@ def dashboard(request):
 
     elif user_role == 'recruiter':
         # get the resumes uploaded
-        resumes = Resumes.objects.all().order_by('-uploaded_at')
+        resumes = Resumes.objects.filter(uploaded_by = request.user).order_by('-uploaded_at')
         context['resumes'] = resumes
 
     return render(request, "accounts/dashboard.html",context)
@@ -29,7 +29,9 @@ def dashboard(request):
 def profile_view(request):
     user = request.user
     if request.method == "POST":
-        user.profile_pictures = request.FILES.get('profile_picture')
+        if 'profile_picture' in request.FILES:
+            user.profile_pictures = request.FILES.get('profile_picture')
+            
         user.bio = request.POST.get('bio')
         user.save()
 

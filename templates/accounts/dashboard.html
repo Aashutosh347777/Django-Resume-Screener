@@ -15,7 +15,7 @@
                         {% endif %}
                         {% if user.is_authenticated and user.role == 'recruiter' %}
                         <div class="btn-group me-2">
-                            <a href="{% url 'jobs:upload_resume' %}" class="btn btn-sm btn-primary"><i class="fas fa-plus me-1"></i> Upload Resumes</a>
+                            <a href="{% url 'resumes:upload_resume' %}" class="btn btn-sm btn-primary"><i class="fas fa-plus me-1"></i> Upload Resumes</a>
                         </div>
                         {% endif %}
                     </div>
